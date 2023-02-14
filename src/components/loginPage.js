@@ -1,13 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useLogin } from "../hooks/useLog";
 
 const LoginPage = () => {
     const redirect = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const {login, loading, error} = useLogin()
     const handleSubmit = async (eventObj)=>{
         eventObj.preventDefault()
-        console.log(email, password)
+        await login(email, password)
     }
     return (  <form className="signupPage" onSubmit={handleSubmit}>
         <h1>Login</h1>
@@ -27,7 +29,7 @@ const LoginPage = () => {
         <button> Login </button> 
         <h3> Not a User yet? <div className="redirect" onClick={(e)=>{
             redirect('/signup')
-        }}> Log In here </div></h3>
+        }}> Sign up here </div></h3>
     </form>);
 }
  

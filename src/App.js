@@ -5,9 +5,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUpPage from "./components/signupPage";
 import LoginPage from "./components/loginPage";
 import { UserContextProvider } from "./context/userContext";
-
+import {  useLogin } from "./hooks/useLog";
 
 function App() {
+  const {logout} = useLogin()
+  const handleLogout = async ()=>{
+    await logout()
+  }
+
   return (
     <UserContextProvider>
       <BrowserRouter> 
@@ -18,6 +23,7 @@ function App() {
             <Route path="/signup" element={<SignUpPage/>} />
             <Route path="/login" element={<LoginPage/>} />
           </Routes>       
+        <button onClick={handleLogout}> Log Out</button>
           <div className="footer"/>
         </div>
       </BrowserRouter>

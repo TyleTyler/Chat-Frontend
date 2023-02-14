@@ -2,18 +2,18 @@ import { useState } from "react";
 import { useUserContext } from "./useUserContext";
 import { userActions } from "../context/userContext";
 
-export const useSignup = ()=>{
+export const useLogin = ()=>{
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(null)
     const {dispatch} = useUserContext()
     console.log(useUserContext())
-    const signup = async (email, password, username)=>{
+    const login = async (email, password)=>{
         setLoading(true)
         setError(null)
-        const response = await fetch("/chatAPI/user/signup", {
+        const response = await fetch("/chatAPI/user/login", {
             method: "POST",
             headers: {'Content-Type' : 'application/json'},
-            body : JSON.stringify({username, email, password})
+            body : JSON.stringify({email, password})
         })
 
         const json = await response.json()
@@ -27,11 +27,11 @@ export const useSignup = ()=>{
             localStorage.setItem('user' ,JSON.stringify(json))
 
             //Updating UserAuth
-            dispatch({type: userActions.LOGIN, payload: json})
+            // dispatch({type: userActions.LOGIN, payload: json})
             
             setLoading(false)
         }
 
     }
-    return {signup, loading, error}
+    return {login, loading, error}
 }
