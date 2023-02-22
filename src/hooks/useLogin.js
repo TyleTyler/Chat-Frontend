@@ -9,7 +9,8 @@ export const useLogin = ()=>{
     const login = async (email, password)=>{
         setLoading(true)
         setError(null)
-        const response = await fetch("/chatAPI/user/login", {
+        console.log(process.env.REACT_APP_BASE_URL + "is the url")
+        const response = await fetch(process.env.REACT_APP_BASE_URL != null? process.env.REACT_APP_BASE_URL +  "/chatAPI/user/login" : "/chatAPI/user/login", {
             method: "POST",
             headers: {'Content-Type' : 'application/json'},
             body : JSON.stringify({email, password})
