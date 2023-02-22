@@ -6,7 +6,6 @@ export const useSignup = ()=>{
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(null)
     const {dispatch} = useUserContext()
-    console.log(useUserContext())
     const signup = async (email, password, username)=>{
         setLoading(true)
         setError(null)

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useLogin } from "../hooks/useLog";
+import { useLogin } from "../hooks/useLogin";
 
 const LoginPage = () => {
     const redirect = useNavigate()
@@ -30,6 +30,7 @@ const LoginPage = () => {
         <h3> Not a User yet? <div className="redirect" onClick={(e)=>{
             redirect('/signup')
         }}> Sign up here </div></h3>
+        { error && <div className="error"> {error} </div>}
     </form>);
 }
  

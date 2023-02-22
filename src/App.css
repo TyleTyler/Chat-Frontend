@@ -24,7 +24,7 @@ a{
 }
 .navComponents{
     width: 40%;
-    height: fit-content;
+    height: 20vh;
     /* background-color: red; */
     display: flex;
     align-self: center;
@@ -40,6 +40,29 @@ a{
     line-height: 55px;
     column-gap: 5%;
 }
+.userPFP{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 80%;
+  row-gap: 0%;
+  margin-bottom: 8%;
+  /* background-color: red; */
+}
+.username{
+  font-size: 0.5em;
+  position: relative;
+  top: 20%;
+}
+.pfp{
+  height: 70%;
+  mix-blend-mode: exclusion;
+  opacity: 0.67;
+  filter: drop-shadow(0px 4px 7px rgba(0, 0, 0, 0.25));
+  border-radius: 51px;
+}
+
 
 .SignUpPrompt{
   width: max-content;
@@ -264,5 +287,6 @@ a{
   color: blue ;
   cursor: pointer;
 }
+
 
 

@@ -6,7 +6,6 @@ export const useLogin = ()=>{
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(null)
     const {dispatch} = useUserContext()
-    console.log(useUserContext())
     const login = async (email, password)=>{
         setLoading(true)
         setError(null)
@@ -27,7 +26,7 @@ export const useLogin = ()=>{
             localStorage.setItem('user' ,JSON.stringify(json))
 
             //Updating UserAuth
-            // dispatch({type: userActions.LOGIN, payload: json})
+            dispatch({type: userActions.LOGIN, payload: json})
             
             setLoading(false)
         }
