@@ -6,7 +6,7 @@ export const useLogin = ()=>{
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(null)
     const {dispatch} = useUserContext()
-    const login = async (email, password)=>{
+    const login = async (email, password, localSave)=>{
         setLoading(true)
         setError(null)
         const response = await fetch("/chatAPI/user/login", {
@@ -23,8 +23,9 @@ export const useLogin = ()=>{
         }
         if(response.ok){
             //Saving user to the local storage
-            localStorage.setItem('user' ,JSON.stringify(json))
-
+            if(localSave){
+                localStorage.setItem('user' ,JSON.stringify(json))
+            }
             //Updating UserAuth
             dispatch({type: userActions.LOGIN, payload: json})
             

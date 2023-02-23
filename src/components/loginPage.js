@@ -7,9 +7,10 @@ const LoginPage = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const {login, loading, error} = useLogin()
+    const [remember, setRemember] = useState(false)
     const handleSubmit = async (eventObj)=>{
-        eventObj.preventDefault()
-        await login(email, password)
+        redirect('/')
+        await login(email, password, remember)
     }
     return (  <form className="signupPage" onSubmit={handleSubmit}>
         <h1>Login</h1>
@@ -25,7 +26,8 @@ const LoginPage = () => {
                 setPassword(e.target.value)
             }}/>
         </div>
-        <div className="rememberMe">  <input type="checkbox"/> Remember Me</div>
+        <div className="rememberMe">  <input type="checkbox" onClick={()=>{setRemember(!remember)
+        console.log(remember)}}/> Remember Me</div>
         <button> Login </button> 
         <h3> Not a User yet? <div className="redirect" onClick={(e)=>{
             redirect('/signup')

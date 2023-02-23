@@ -6,6 +6,7 @@ import userPFP from "../public/user.png"
 
 const Navbar = () => {
     const {user} = useUserContext(); 
+    console.log(user)
     return ( <div className="navbar">
         <img className ="logo" src={logo} />
         <nav className="navComponents">
@@ -15,7 +16,7 @@ const Navbar = () => {
              <div>About</div>
              <div>FQA</div>
              {user && (<div className="userPFP"> 
-                <h1 className="username"> {user.username} </h1>
+                <h1 className="username"> {user._doc.username} </h1>
                 <img src={userPFP} className="pfp"/>
              </div>)}
         </nav>
