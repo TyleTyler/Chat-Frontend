@@ -3,11 +3,6 @@ import { useUserContext } from "../hooks/useUserContext";
 import logo from "../public/LogoChat.png"
 import userPFP from "../public/user.png"
 
-
-const Navbar = () => {
-const {user} = useUserContext();
-import logpng from "../public/logout.png"
-import cog from "../public/cog.png"
 import { useLogout } from "../hooks/useLogout";
 import { useState } from "react";
 
@@ -24,8 +19,6 @@ const Navbar = () => {
              <div>Contact</div>
              <div>About</div>
              <div>FQA</div>
-             {user && (<div className="userPFP"> 
-                <h1 className="username"> {user.username} </h1>
              {user && (<div className="userPFP" onClick={()=>setPfpPopUp(!pfpPopUp)}> 
                 <h1 className="username"> {user._doc.username} </h1>
                 {pfpPopUp && <section className="pfpPopUp"> 
@@ -36,7 +29,7 @@ const Navbar = () => {
                         alert("Copied Friend Code")
                     }}>Friend Code: {user._doc.friendCode}</div>
                     <hr/>
-                    <div className="popUptext" onClick={logout}>Logout</div><img src={logpng}/>
+                    <div className="popUptext" onClick={logout}>Logout</div>    
                 </section>}
                 <img src={userPFP} className="pfp"/>
              </div>)}

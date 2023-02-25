@@ -5,19 +5,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUpPage from "./components/signupPage";
 import LoginPage from "./components/loginPage";
 import { useLogout } from "./hooks/useLogout";
+import { useUserContext } from "./hooks/useUserContext";
+import HomePage from "./components/homePage";
 function App() {
-  const {logout} = useLogout()
-  
+  const {user} = useUserContext()
   return (
       <BrowserRouter> 
         <div className="App">
           <Navbar />
           <Routes>
-            <Route path="/" element={<SignUpPrompt/>}/>
+            {!user && <Route path="/" element={<SignUpPrompt/>}/>}
+            <Route path="/" element={<HomePage/>}/>
             <Route path="/signup" element={<SignUpPage/>} />
             <Route path="/login" element={<LoginPage/>} />
           </Routes>    
-          <button onClick={logout}> Log out</button>
           <div className="footer"/>
         </div>
       </BrowserRouter>
