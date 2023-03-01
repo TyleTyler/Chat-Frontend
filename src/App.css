@@ -404,3 +404,25 @@ a{
   width: 86%;
   height: 100%;
 }
+
+
+.friendSection{
+  height: 8%;
+  width: 100%;
+  margin-top: 3%;
+  border: 1px solid #FFFFFF;
+  display: flex;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  justify-content: flex-start;
+  font-family: 'Signika';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 42px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #FFFFFF;
+}
