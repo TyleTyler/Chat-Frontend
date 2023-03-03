@@ -407,6 +407,7 @@ a{
 
 
 .friendSection{
+  /* white-space: nowrap; */
   height: 8%;
   width: 100%;
   margin-top: 3%;
@@ -419,10 +420,60 @@ a{
   font-family: 'Signika';
   font-style: normal;
   font-weight: 400;
-  font-size: 2rem;
-  line-height: 42px;
+  font-size: 1.8rem;
+  line-height: 28px;
   display: flex;
   align-items: center;
   text-align: center;
   color: #FFFFFF;
+}
+
+.friendRequest{
+  height: 10%;
+  width: 10%;
+}
+
+
+.activated > img{
+  display: none;
+}
+
+.activated{
+  justify-content: flex-start;
+  padding-left: 5%;
+  /* background-color: red; */
+  border-style: none;
+  width: 70%;
+}
+
+.activated::after{
+  content: '';
+  position: absolute;
+  left: 13%;
+  width: 0;
+  height: 0;
+  animation: activate 1s forwards;
+  border-top: 10vh solid transparent;
+  border-bottom: 10vh solid transparent;
+  border-left: 0.6vw solid transparent;  
+  border-right: 12vw solid white; 
+}
+
+@keyframes activate {
+  0%{
+    left: 13%;
+  }
+  40%{
+    left: 9.6%;
+  }
+  98%{
+    left: 10%;
+  }
+  100%{
+    left: 10%;
+  }
+}
+
+.deactivated{
+  background-color: red;
 }
