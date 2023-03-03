@@ -3,8 +3,8 @@ import { useContext } from "react";
 
 export const useUserContext = ()=>{
     const context = useContext(UserContext)
+    return context
     if(!context){
         throw Error("useUserContext must be used within its scope")
     }
-    return context
 }
