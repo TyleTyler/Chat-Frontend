@@ -1,10 +1,9 @@
 import {useState, useEffect} from 'react';
-let useFetch = (url) =>{
+export const useFetch = () =>{
     const [error, setError] = useState(null)
     const [data, setData] = useState(null)
     const [isPending, setPending] = useState(true)
-    
-    useEffect(()=>{
+    const fetchData = (url) =>{ 
         fetch((process.env.REACT_APP_BASE_URL != null ? process.env.REACT_APP_BASE_URL + url : url)).then(res =>{
             if(!res.ok){
                 throw Error('Could not get data')
@@ -18,7 +17,7 @@ let useFetch = (url) =>{
             setPending(false)
             setError(e.message)
         })
-    }, [url])
-    return { data, isPending, error}
+    }
+    
+    return { data, isPending, error, fetchData}
 }
-export default useFetch;
