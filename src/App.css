@@ -398,11 +398,19 @@ a{
   align-self: center;
 }
 
+.notif{
+  background-image: url("./public/addFriendNotif.png"); 
+}
+
 
 
 .chatSection{
   width: 86%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
 }
 
 
@@ -435,7 +443,20 @@ a{
   position: absolute;
   left: 14%;
   top: 23%;
+  transform-origin: top left ;
+  animation: friendPopUp 0.2s forwards;
+  z-index: 2;
 }
+
+@keyframes friendPopUp {
+  0%{
+    transform: scaleY(0.1);
+  }
+  100%{
+    transform: scaleY(1)
+  }
+}
+
 .codeInput{
   display: flex;
   align-items: center;
@@ -513,4 +534,22 @@ input:focus{
 
 .deactivated{
   background-color: red;
+}
+
+.inactivePic{
+  /* padding-top:; */
+  width: 70%;
+  height: 50%;
+  margin: 0 auto;
+  margin-top: 2%;
+  background-image: url("./public/inactive.png");
+  background-repeat: no-repeat;
+  background-position: center 10%;
+  background-size:contain;
+  /* background-color: red; */
+}
+
+.inactive > span{
+  color: blue;
+  cursor: pointer;
 }
