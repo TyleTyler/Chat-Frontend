@@ -1,3 +1,5 @@
+
+
 a{
   color: black;
   text-decoration: none;
@@ -66,6 +68,8 @@ a{
   box-shadow: 2px -2px 6px 3px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
+  transform-origin: top right ;
+  animation: popUp 0.2s forwards;
 
 }
 .pfpPopUp > hr{
@@ -177,8 +181,6 @@ a{
 .h2Signup{
   position: relative;
   display: flex;
-  /* bottom: 14%; */
-  /* background-color: blue; */
   height: fit-content;
   justify-content: space-between; 
 }
@@ -444,18 +446,19 @@ a{
   left: 14%;
   top: 23%;
   transform-origin: top left ;
-  animation: friendPopUp 0.2s forwards;
+  animation: popUp 0.2s forwards;
   z-index: 2;
 }
 
-@keyframes friendPopUp {
+@keyframes popUp {
   0%{
-    transform: scaleY(0.1);
+    transform: scale(0.1);
   }
   100%{
-    transform: scaleY(1)
+    transform: scale(1)
   }
 }
+
 
 .codeInput{
   display: flex;
@@ -489,6 +492,22 @@ input:focus{
 .friendRequest{
   height: 10%;
   width: 10%;
+}
+
+.incomingRequests{
+  width: 120%;
+  height: 20vh;
+  display: flex;
+  margin: 0 auto;
+  padding: 0% 4%;
+  flex-direction: column;
+  background: #D9D9D9;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  font-family: 'Signika';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1rem;
 }
 
 
@@ -549,7 +568,73 @@ input:focus{
   /* background-color: red; */
 }
 
+.inactive{
+  animation: fadeIn 0.2s forwards;
+}
 .inactive > span{
   color: blue;
   cursor: pointer;
+}
+
+@keyframes fadeIn {
+  0%{
+    opacity: 0%;
+  }
+  100%{
+    opacity: 100%;
+  }
+  
+}
+
+.incomingRequests > div{
+  height: 20%;
+  width: 100%;
+  /* background-color: green; */
+  margin-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  row-gap: 4%;
+}
+
+.incomingRequests > div >h1{
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 1rem;
+  color: #FFFFFF;
+  line-height: 20px;
+  text-align: center;
+  font-family: "Signika";
+  font-style: normal;
+}
+.requestSection{
+  width: 40%;
+  height: 70%;
+  display: flex;
+  column-gap: 0%;
+}
+
+.requestOption{
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.requestOption:nth-child(1){
+  background-image: url("./public/accept.png"); 
+}
+.requestOption:nth-child(1):hover{
+  background-image: url("./public/acceptHover.png"); 
+}
+
+.requestOption:nth-child(2){
+  background-image: url("./public/reject.png"); 
+}
+
+.requestOption:nth-child(2):hover{
+  background-image: url("./public/rejectHover.png"); 
 }

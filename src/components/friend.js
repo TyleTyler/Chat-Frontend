@@ -3,7 +3,7 @@ import { useActiveContext } from "../hooks/userActiveContext";
 import userPFP from "../public/user.png"
 
 const Friend = ({user}) => {
-    const {activeComponent, activate } = useActiveContext()
+    const {activeComponent, activate, activeSetting, setSettings } = useActiveContext()
     const {username} =  user
     const [active, setActive] = useState(false);
     useEffect(()=>{
@@ -13,16 +13,19 @@ const Friend = ({user}) => {
         else{setActive(false)}
     }, [activeComponent])
 
-    return ( <section data-key = {user._id} className={ active ? 'friendSection activated' : 'friendSection'} onClick={(e) => {
-        activate(e.target.dataset.key)
-        console.log(e.target.classList)
-        if(activeComponent == e.target.dataset.key){
-            // e.target.classList.toggle("deactivated")
-            // setTimeout(()=>e.target.classList.toggle("deactivated"), 100)
+    return ( <section className={ active ? 'friendSection activated' : 'friendSection'} 
+    onClick={(e) => {
+        activate(user._id)
+        if(activeComponent == user._id){
             setActive(false)
             activate(null)
         }
-      }}><img src={userPFP} className="pfp"/> <div className="userPFP"/> {username} </section> );
+      }}
+    onContextMenu={(e)=>{
+        e.preventDefault()
+        
+        setSettings({ user })
+    }}><img src={userPFP} className="pfp"/> <div className="userPFP"/> {username} </section> );
 }
  
 export default Friend;
