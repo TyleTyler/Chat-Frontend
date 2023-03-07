@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useFetch} from "../hooks/useFetch"
 import { useUserContext } from "../hooks/useUserContext";
 import Friend from "./friend";
@@ -10,16 +10,27 @@ const HomePage = () => {
     const [addFriendPopUp, setAddFriendPopUp] = useState(false)
     const [friendCode, setFriendCode] = useState(null)
     const {isPending, data, fetchData, error} = useFetch()
-    const {activeComponent, activeSetting} = useActiveContext()
+    const {activeComponent, activeSetting, setSettings} = useActiveContext()
+    const settingBox = useRef()
     const handleFriend = (id, action)=>{
         window.location.reload()
         fetchData(`/chatAPI/user/${action}Req/${user._doc._id}/${id}`)
 
     }
+    const disableSetting = (pointer) =>{
+        if(!activeSetting){
+            return false;
+        }
+        
+        const settingBounds = settingBox.current.getBoundingClientRect()
+        if((pointer.clientX >= settingBounds.x && pointer.clientX <= settingBounds.x + settingBounds.width) && (pointer.clientY >= settingBounds.y && pointer.clientY <= settingBounds.y + settingBounds.height) ){
+            return false;
+        }
+        setSettings(null)
+    }
 
-
-    return (<div className="homePage">
-            {activeSetting && <div> Settings </div>}
+    return (<div onClick= {(e)=>disableSetting(e)}   className="homePage">
+            {activeSetting && <div className="quickSettings" style={{left: `${activeSetting.x}px`, top:`${activeSetting.y}px` }}ref={settingBox}> Settings </div>}
             <section className="friendsBar"> 
                 <div onClick={()=>{setAddFriendPopUp(!addFriendPopUp)}}> <h1>Friends </h1> <div className= { user._doc.friendRequest.length >= 1 ? "addFriendLogo notif" : "addFriendLogo"} onClick={() => {setAddFriendPopUp(!addFriendPopUp)}}/></div>
                 {addFriendPopUp && 

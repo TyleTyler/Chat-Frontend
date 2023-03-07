@@ -5,9 +5,7 @@ export const ActiveContext = createContext()
 
 export const ActiveContextProvider = ({children})=>{
     const [activeComponent, activate] = useState(null)
-    const [activeSetting, setSettings] = useState({
-        user : null
-    })
+    const [activeSetting, setSettings] = useState(null)
     return(
         <ActiveContext.Provider value={{activeComponent, activate, activeSetting, setSettings}}>
             {children}

@@ -638,3 +638,11 @@ input:focus{
 .requestOption:nth-child(2):hover{
   background-image: url("./public/rejectHover.png"); 
 }
+
+.quickSettings{
+  position: absolute;
+  width: 10%;
+  height: 10%;
+  background-color: gray;
+  
+}

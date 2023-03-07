@@ -23,8 +23,7 @@ const Friend = ({user}) => {
       }}
     onContextMenu={(e)=>{
         e.preventDefault()
-        
-        setSettings({ user })
+        setSettings({ user, x: e.clientX, y: e.clientY})
     }}><img src={userPFP} className="pfp"/> <div className="userPFP"/> {username} </section> );
 }
  
