@@ -1,12 +1,16 @@
 import {useState, useEffect} from 'react';
 import { useUserContext } from './useUserContext';
 
-export const useFetch = () =>{
+export const useRemoveFriend = () =>{
+    const {stageChanges} = useUserContext()
     const [error, setError] = useState(null)
     const [data, setData] = useState(null)
     const [isPending, setPending] = useState(true)
-    const fetchData = (url) =>{ 
-        fetch((process.env.REACT_APP_BASE_URL != null ? process.env.REACT_APP_BASE_URL + url : url)).then(res =>{
+    const removeFriend = (userID, friendID) =>{ 
+        const url = `/chatAPI/user/removeFriend/${userID}/${friendID}`
+        fetch((process.env.REACT_APP_BASE_URL != null ? process.env.REACT_APP_BASE_URL + url : url), {
+            method: "DELETE"
+        }).then(res =>{
             if(!res.ok){
                 throw Error('Could not get data')
             }
@@ -15,12 +19,12 @@ export const useFetch = () =>{
             setData(data)
             setPending(false)
             setError(null)
-            useUserContext.stageChanges()
+            stageChanges()
         }).catch(e=>{
             setPending(false)
             setError(e.message)
         })
     }
     
-    return { data, isPending, error, fetchData}
+    return { data, isPending, error, removeFriend}
 }

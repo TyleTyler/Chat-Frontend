@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useState, useEffect, useReducer } from "react";
 import { useFetch } from "../hooks/useFetch";
 
 export const UserContext = createContext()
@@ -16,20 +16,23 @@ export const userReducer = (state, action)=>{
     }
 }
 export const UserContextProvider = ({children})=>{
+    const [changes, setChanges] = useState(false)
+    const stageChanges = () => {
+      setChanges(!changes)
+    }
     const [state, dispatch] = useReducer(userReducer, {
         user:null
     })
     const { data : updatedUser, fetchData} = useFetch() 
     useEffect(()=>{
         const user = JSON.parse(localStorage.getItem("user"))
-
         if(user){
             fetch('/chatAPI/user/getUser/' + user._doc._id).then(response => {return response.json()}).then(updatedUser => {dispatch({type: userActions.LOGIN, payload :updatedUser })})
         }
-    },[])
+    },[changes])
 
     return(
-        <UserContext.Provider value={{...state, dispatch}}>
+        <UserContext.Provider value={{...state, dispatch, stageChanges}}>
             {children}
         </UserContext.Provider>
     )

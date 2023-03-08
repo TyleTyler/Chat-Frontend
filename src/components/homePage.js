@@ -2,18 +2,19 @@ import { useRef, useState } from "react";
 import { useFetch} from "../hooks/useFetch"
 import { useUserContext } from "../hooks/useUserContext";
 import Friend from "./friend";
-import FriendRequest from "./friendRequest";
 import { useActiveContext } from "../hooks/userActiveContext";
+import { useRemoveFriend } from "../hooks/useRemoveFriend";
+
 
 const HomePage = () => {
     const {user} = useUserContext()
     const [addFriendPopUp, setAddFriendPopUp] = useState(false)
     const [friendCode, setFriendCode] = useState(null)
     const {isPending, data, fetchData, error} = useFetch()
-    const {activeComponent, activeSetting, setSettings} = useActiveContext()
+    const {removeFriend} = useRemoveFriend()
+    const {activeComponent, activate, activeSetting, setSettings} = useActiveContext()
     const settingBox = useRef()
     const handleFriend = (id, action)=>{
-        window.location.reload()
         fetchData(`/chatAPI/user/${action}Req/${user._doc._id}/${id}`)
 
     }
@@ -29,8 +30,33 @@ const HomePage = () => {
         setSettings(null)
     }
 
+
+    
+
     return (<div onClick= {(e)=>disableSetting(e)}   className="homePage">
-            {activeSetting && <div className="quickSettings" style={{left: `${activeSetting.x}px`, top:`${activeSetting.y}px` }}ref={settingBox}> Settings </div>}
+
+            {activeSetting && <section className="quickSettings" style={{left: `${activeSetting.x}px`, top:`${activeSetting.y}px` }}ref={settingBox}> 
+                <div> Profile </div>
+                <hr/>
+                <div onClick={()=>{activate(activeSetting.user._id)
+                     setSettings(null)}}> Message </div>
+                <hr/>
+                <div> Nickname </div>
+                <hr/>
+                <div onClick={()=>{navigator.clipboard.writeText(activeSetting.user.friendCode)
+                    alert(`Copied ${activeSetting.user.username}'s Code` )
+                    setSettings(null)}}> Copy ID </div>
+                <hr/>
+                <div className="criticalAction"> Block </div>
+                <hr/>
+                <div className="criticalAction" onClick={(e)=>{
+                    removeFriend(activeSetting.user._id, user._doc._id)
+                    setSettings(null)
+                    window.location.reload()
+                    }}> Remove </div>
+             </section>}
+
+
             <section className="friendsBar"> 
                 <div onClick={()=>{setAddFriendPopUp(!addFriendPopUp)}}> <h1>Friends </h1> <div className= { user._doc.friendRequest.length >= 1 ? "addFriendLogo notif" : "addFriendLogo"} onClick={() => {setAddFriendPopUp(!addFriendPopUp)}}/></div>
                 {addFriendPopUp && 
@@ -41,12 +67,11 @@ const HomePage = () => {
                     <div className="codeInput"><input type="text"  value = {friendCode} onChange={(input) => {setFriendCode(input.target.value)}}/> </div>
                     <section className="incomingRequests"> Incoming Requests 
                         {user._doc.friendRequest.map(request => 
-                            (<div> <h1>{request.username} </h1> <section className="requestSection"><div className="requestOption" onClick={(e)=>{handleFriend(e, request._id, "accept")}}/> <div className="requestOption" onClick={(e)=>{handleFriend(e, request._id, "reject")}}/></section> </div>))
+                            (<div> <h1>{request.username} </h1> <section className="requestSection"><div className="requestOption" onClick={(e)=>{handleFriend( request._id, "accept")}}/> <div className="requestOption" onClick={(e)=>{handleFriend(request._id, "reject")}}/></section> </div>))
                         }
                     </section> 
                 </form>}
-            {data && <div> Sent!</div>}
-                {addFriendPopUp && <FriendRequest />}
+            {/* {data && <div> Sent!</div>} */}
                 {user._doc.friends.map(friend => (<Friend user = {friend}/>))}
             </section>    
             {activeComponent == null && <section className="chatSection inactive"> <div className="inactivePic"/> <div>Start a conversation with a friend! </div> <span onClick={() => {setAddFriendPopUp(!addFriendPopUp)} }> or Add a friend</span> </section>}        
