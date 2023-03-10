@@ -9,6 +9,7 @@ import { useRemoveFriend } from "../hooks/useRemoveFriend";
 const HomePage = () => {
     const {user} = useUserContext()
     const [addFriendPopUp, setAddFriendPopUp] = useState(false)
+    const [requestsPopUp, setRequestPopUp] = useState(false)
     const [friendCode, setFriendCode] = useState(null)
     const {isPending, data, fetchData, error} = useFetch()
     const {removeFriend} = useRemoveFriend()
@@ -65,11 +66,23 @@ const HomePage = () => {
                         fetchData(`/chatAPI/user/sendRequest/${user._doc.email}/${friendCode}`)
                     }}> 
                     <div className="codeInput"><input type="text"  value = {friendCode} onChange={(input) => {setFriendCode(input.target.value)}}/> </div>
-                    <section className="incomingRequests"> Incoming Requests 
+                    <div className="requestPopUp" data-state="uncollapsed" onClick={(e)=>{
+                        setRequestPopUp(!requestsPopUp)
+                        if(e.currentTarget.dataset.state === "uncollapsed"){
+                            e.currentTarget.classList.add("turnRight")
+                            e.currentTarget.classList.remove("turnLeft")
+                            e.currentTarget.dataset.state = "collapsed"
+                        }else{
+                            e.currentTarget.classList.add("turnLeft")
+                            e.currentTarget.classList.remove("turnRight")
+                            e.currentTarget.dataset.state = "uncollapsed"
+                        }
+                    }}/>
+                    { requestsPopUp && <section className="incomingRequests"> Incoming Requests 
                         {user._doc.friendRequest.map(request => 
                             (<div> <h1>{request.username} </h1> <section className="requestSection"><div className="requestOption" onClick={(e)=>{handleFriend( request._id, "accept")}}/> <div className="requestOption" onClick={(e)=>{handleFriend(request._id, "reject")}}/></section> </div>))
                         }
-                    </section> 
+                    </section> }
                 </form>}
             {/* {data && <div> Sent!</div>} */}
                 {user._doc.friends.map(friend => (<Friend user = {friend}/>))}

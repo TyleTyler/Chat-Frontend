@@ -495,10 +495,12 @@ input:focus{
 }
 
 .incomingRequests{
+  position: relative;
+  bottom: 50%;
   width: 120%;
   height: 20vh;
+  z-index: 1;
   display: flex;
-  margin: 0 auto;
   padding: 0% 4%;
   flex-direction: column;
   background: #D9D9D9;
@@ -508,6 +510,8 @@ input:focus{
   font-style: normal;
   font-weight: 400;
   font-size: 1rem;
+  transform-origin: 70% 0;
+  animation: popUp 0.2s forwards;
 }
 
 
@@ -674,4 +678,42 @@ input:focus{
 
 .quickSettings > .criticalAction{
   color: red;
+}
+
+.requestPopUp{
+  position: relative;
+  z-index: 3;
+  width: 15%;
+  height: 48%;
+  bottom: 25%;
+  left: 85%;
+  background-image: url("./public/collapse.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.turnRight{
+  animation: rotateRight 0.2s forwards;
+}
+
+.turnLeft{
+  animation: rotateLeft 0.2s forwards;
+}
+
+@keyframes rotateRight {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(180deg);
+  }
+  
+}
+@keyframes rotateLeft {
+  0%{
+    transform: rotate(180deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+  
 }
