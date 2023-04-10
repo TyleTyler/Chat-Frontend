@@ -375,8 +375,8 @@ a{
   font-family: 'Signika';
   font-style: normal;
   font-weight: 400;
-  font-size: 2.6rem;
-  line-height: 20px;
+  font-size: 1.8rem;
+  line-height: 10px;
   padding-left: 3%;
   display: flex;
   align-items: center;
@@ -386,6 +386,24 @@ a{
   order: 0;
   flex-grow: 0;
 }
+.friendsBar > h4{
+  font-family: 'Signika';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1rem;
+  padding-left: 3%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #FFFFFF;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+
+
+
 .addFriendLogo{
   position: relative;
   left: 4%;

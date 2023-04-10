@@ -6,10 +6,15 @@ export const useRemoveFriend = () =>{
     const [error, setError] = useState(null)
     const [data, setData] = useState(null)
     const [isPending, setPending] = useState(true)
+    const {user} = useUserContext()
     const removeFriend = (userID, friendID) =>{ 
         const url = `/chatAPI/user/removeFriend/${userID}/${friendID}`
+        console.log(user);
         fetch((process.env.REACT_APP_BASE_URL != null ? process.env.REACT_APP_BASE_URL + url : url), {
-            method: "DELETE"
+            method: "DELETE",
+            headers:{
+                "Authorization" : `Bearer ${user.token}`
+            }
         }).then(res =>{
             if(!res.ok){
                 throw Error('Could not get data')

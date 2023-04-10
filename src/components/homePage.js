@@ -4,21 +4,21 @@ import { useUserContext } from "../hooks/useUserContext";
 import Friend from "./friend";
 import { useActiveContext } from "../hooks/userActiveContext";
 import { useRemoveFriend } from "../hooks/useRemoveFriend";
-
+import { useAddFriend } from "../hooks/useAddFriend";
 
 const HomePage = () => {
     const {user} = useUserContext()
+    const {addFriend} = useAddFriend()
     const [addFriendPopUp, setAddFriendPopUp] = useState(false)
     const [requestsPopUp, setRequestPopUp] = useState(false)
+    const [addChatPopUp, setAddChatPopUp] = useState(false)
     const [friendCode, setFriendCode] = useState(null)
-    const {isPending, data, fetchData, error} = useFetch()
+    const [possibleUsers, setPossibleUsers] = useState([])
+    const {makeRequest} = useFetch()
     const {removeFriend} = useRemoveFriend()
     const {activeComponent, activate, activeSetting, setSettings} = useActiveContext()
     const settingBox = useRef()
-    const handleFriend = (id, action)=>{
-        fetchData(`/chatAPI/user/${action}Req/${user._doc._id}/${id}`)
 
-    }
     const disableSetting = (pointer) =>{
         if(!activeSetting){
             return false;
@@ -30,8 +30,8 @@ const HomePage = () => {
         }
         setSettings(null)
     }
-
-
+    
+    
     
 
     return (<div onClick= {(e)=>disableSetting(e)}   className="homePage">
@@ -51,19 +51,25 @@ const HomePage = () => {
                 <div className="criticalAction"> Block </div>
                 <hr/>
                 <div className="criticalAction" onClick={(e)=>{
-                    removeFriend(activeSetting.user._id, user._doc._id)
+                    removeFriend(activeSetting.user._id, user._id)
                     setSettings(null)
-                    window.location.reload()
+                    // window.location.reload()
                     }}> Remove </div>
              </section>}
 
 
             <section className="friendsBar"> 
-                <div onClick={()=>{setAddFriendPopUp(!addFriendPopUp)}}> <h1>Friends </h1> <div className= { user._doc.friendRequest.length >= 1 ? "addFriendLogo notif" : "addFriendLogo"} onClick={() => {setAddFriendPopUp(!addFriendPopUp)}}/></div>
+                <div onClick={()=>{setAddFriendPopUp(!addFriendPopUp)}}> <h1>Chat Rooms </h1> <div className= { user.friendRequest.length >= 1 ? "addFriendLogo notif" : "addFriendLogo"} onClick={() => {setAddFriendPopUp(!addFriendPopUp)}}/></div>
+                {/* <h4 onClick={()=>{setAddChatPopUp(!addChatPopUp)}}>Create Room +</h4> */}
+                {/* {addChatPopUp && 
+                <form> 
+                    <div> <input/> </div>
+                    
+                </form>} */}
                 {addFriendPopUp && 
                 <form className= "addFriendPopUp" onSubmit={(e)=>{
                         e.preventDefault()
-                        fetchData(`/chatAPI/user/sendRequest/${user._doc.email}/${friendCode}`)
+                        makeRequest(`/chatAPI/user/sendRequest/${user.email}/${friendCode}`)
                     }}> 
                     <div className="codeInput"><input type="text"  value = {friendCode} onChange={(input) => {setFriendCode(input.target.value)}}/> </div>
                     <div className="requestPopUp" data-state="uncollapsed" onClick={(e)=>{
@@ -79,13 +85,12 @@ const HomePage = () => {
                         }
                     }}/>
                     { requestsPopUp && <section className="incomingRequests"> Incoming Requests 
-                        {user._doc.friendRequest.map(request => 
-                            (<div> <h1>{request.username} </h1> <section className="requestSection"><div className="requestOption" onClick={(e)=>{handleFriend( request._id, "accept")}}/> <div className="requestOption" onClick={(e)=>{handleFriend(request._id, "reject")}}/></section> </div>))
+                        {user.friendRequest.map(request => 
+                            (<div> <h1>{request.username} </h1> <section className="requestSection"><div className="requestOption" onClick={(e)=>{addFriend( user._id, request._id, "accept")}}/> <div className="requestOption" onClick={(e)=>{addFriend( user._id, request._id, "reject")}}/></section> </div>))
                         }
                     </section> }
                 </form>}
-            {/* {data && <div> Sent!</div>} */}
-                {user._doc.friends.map(friend => (<Friend user = {friend}/>))}
+                {user.friends.map(friend => (<Friend user = {friend}/>))}
             </section>    
             {activeComponent == null && <section className="chatSection inactive"> <div className="inactivePic"/> <div>Start a conversation with a friend! </div> <span onClick={() => {setAddFriendPopUp(!addFriendPopUp)} }> or Add a friend</span> </section>}        
     </div>);

@@ -20,14 +20,14 @@ const Navbar = () => {
              <div>About</div>
              <div>FQA</div>
              {user && (<div className="userPFP" onClick={()=>setPfpPopUp(!pfpPopUp)}> 
-                <h1 className="username"> {user._doc.username} </h1>
+                <h1 className="username"> {user.username} </h1>
                 {pfpPopUp && <section className="pfpPopUp"> 
                     <div className="popUptext"> Account Settings </div>
                     <hr/>
                     <div className="popUptext" id="friendcode" onClick={()=>{
-                        navigator.clipboard.writeText(user._doc.friendCode)
+                        navigator.clipboard.writeText(user.friendCode)
                         alert("Copied Friend Code")
-                    }}>Friend Code: {user._doc.friendCode}</div>
+                    }}>Friend Code: {user.friendCode}</div>
                     <hr/>
                     <div className="popUptext" onClick={logout}>Logout</div>    
                 </section>}
