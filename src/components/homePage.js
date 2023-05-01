@@ -5,6 +5,7 @@ import Friend from "./friend";
 import { useActiveContext } from "../hooks/userActiveContext";
 import { useRemoveFriend } from "../hooks/useRemoveFriend";
 import { useAddFriend } from "../hooks/useAddFriend";
+import { getPossibleUsers } from "../hooks/useGetPossibleUsers";
 
 const HomePage = () => {
     const {user} = useUserContext()
@@ -13,17 +14,25 @@ const HomePage = () => {
     const [requestsPopUp, setRequestPopUp] = useState(false)
     const [addChatPopUp, setAddChatPopUp] = useState(false)
     const [friendCode, setFriendCode] = useState(null)
-    const [possibleUsers, setPossibleUsers] = useState([])
-    const {makeRequest} = useFetch()
     const {removeFriend} = useRemoveFriend()
+    const [possibleUsers, setPossibleUsers] = useState()
+
+    //!This causes an infinite loop
+    const getUsers = async (searchTerm, userId) =>{
+        // await getPossibleUsers("fra", user._id)
+        let nUsers = await getPossibleUsers(searchTerm, userId)
+        setPossibleUsers(nUsers)
+        // console.log(possibleUsers)
+    }
+    getUsers("frank", user._id)
+
+
     const {activeComponent, activate, activeSetting, setSettings} = useActiveContext()
     const settingBox = useRef()
-
     const disableSetting = (pointer) =>{
         if(!activeSetting){
             return false;
-        }
-        
+    }
         const settingBounds = settingBox.current.getBoundingClientRect()
         if((pointer.clientX >= settingBounds.x && pointer.clientX <= settingBounds.x + settingBounds.width) && (pointer.clientY >= settingBounds.y && pointer.clientY <= settingBounds.y + settingBounds.height) ){
             return false;
@@ -60,16 +69,26 @@ const HomePage = () => {
 
             <section className="friendsBar"> 
                 <div onClick={()=>{setAddFriendPopUp(!addFriendPopUp)}}> <h1>Chat Rooms </h1> <div className= { user.friendRequest.length >= 1 ? "addFriendLogo notif" : "addFriendLogo"} onClick={() => {setAddFriendPopUp(!addFriendPopUp)}}/></div>
-                {/* <h4 onClick={()=>{setAddChatPopUp(!addChatPopUp)}}>Create Room +</h4> */}
-                {/* {addChatPopUp && 
+                <h4 onClick={()=>{setAddChatPopUp(!addChatPopUp)}}>Create Room +</h4>
+                {addChatPopUp && 
                 <form> 
-                    <div> <input/> </div>
+                    <div className="gcBox"> 
+                        {/* <input className="gcInput" placeholder="Chat Name..." onChange={async (e)=>{
+                            nUsers = await getPossibleUsers(e.currentTarget)
+                            console.log(nUsers)
+                        }}/>
+                        {nUsers.map(member =>{
+                            (<div> {member.username}</div>)
+                        })} */}
+                        <select name="members" className="memberSelect">
+                        </select>
+                     </div>
                     
-                </form>} */}
+                </form>}
                 {addFriendPopUp && 
                 <form className= "addFriendPopUp" onSubmit={(e)=>{
                         e.preventDefault()
-                        makeRequest(`/chatAPI/user/sendRequest/${user.email}/${friendCode}`)
+                        // makeRequest(`/chatAPI/user/sendRequest/${user.email}/${friendCode}`)
                     }}> 
                     <div className="codeInput"><input type="text"  value = {friendCode} onChange={(input) => {setFriendCode(input.target.value)}}/> </div>
                     <div className="requestPopUp" data-state="uncollapsed" onClick={(e)=>{
@@ -94,6 +113,5 @@ const HomePage = () => {
             </section>    
             {activeComponent == null && <section className="chatSection inactive"> <div className="inactivePic"/> <div>Start a conversation with a friend! </div> <span onClick={() => {setAddFriendPopUp(!addFriendPopUp)} }> or Add a friend</span> </section>}        
     </div>);
-}
- 
+} 
 export default HomePage;

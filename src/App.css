@@ -1,5 +1,4 @@
 
-
 a{
   color: black;
   text-decoration: none;
@@ -390,8 +389,9 @@ a{
   font-family: 'Signika';
   font-style: normal;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.1rem;
   padding-left: 3%;
+  margin: 0;
   display: flex;
   align-items: center;
   text-align: center;
@@ -734,4 +734,35 @@ input:focus{
     transform: rotate(360deg);
   }
   
+}
+
+.gcBox{
+  position: absolute;
+  height: 40%;
+  width: 40%;
+  left: 10%;
+
+  background: #D9D9D9;
+  border: 1px solid #000000;
+  border-radius: 11px;
+  z-index: 10;
+}
+
+.gcInput{
+  position: relative;
+  top: 10%;
+  left: 2%;
+  height: 10%;
+  width: 40%;
+
+  background: rgba(247, 237, 237, 0.74);
+  border: 0.5px solid #000000;
+  border-radius: 5px;
+  font-size: 1.5rem;
+}
+
+.gcInput::placeholder{
+  font-size: 1.5rem;
+  position: relative;
+  /* top: 10%; */
 }
