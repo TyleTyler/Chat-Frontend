@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFetch} from "../hooks/useFetch"
 import { useUserContext } from "../hooks/useUserContext";
 import Friend from "./friend";
@@ -9,23 +9,24 @@ import { getPossibleUsers } from "../hooks/useGetPossibleUsers";
 
 const HomePage = () => {
     const {user} = useUserContext()
-    const {addFriend} = useAddFriend()
+    const {addFriend: handleFriend} = useAddFriend()
     const [addFriendPopUp, setAddFriendPopUp] = useState(false)
     const [requestsPopUp, setRequestPopUp] = useState(false)
     const [addChatPopUp, setAddChatPopUp] = useState(false)
     const [friendCode, setFriendCode] = useState(null)
     const {removeFriend} = useRemoveFriend()
     const [possibleUsers, setPossibleUsers] = useState()
+    const [searchTerm, setSearchTerm] = useState("")
+    const {makeRequest} = useFetch()
 
-    //!This causes an infinite loop
-    const getUsers = async (searchTerm, userId) =>{
-        // await getPossibleUsers("fra", user._id)
-        let nUsers = await getPossibleUsers(searchTerm, userId)
-        setPossibleUsers(nUsers)
-        // console.log(possibleUsers)
-    }
-    getUsers("frank", user._id)
-
+    
+    const chatList = [...user.friends, user.chats]
+    console.log(chatList);
+    useEffect(()=>{
+        getPossibleUsers(searchTerm, user._id).then((data)=>{
+            setPossibleUsers(data)
+        })
+    },[user._id, searchTerm])
 
     const {activeComponent, activate, activeSetting, setSettings} = useActiveContext()
     const settingBox = useRef()
@@ -68,19 +69,22 @@ const HomePage = () => {
 
 
             <section className="friendsBar"> 
-                <div onClick={()=>{setAddFriendPopUp(!addFriendPopUp)}}> <h1>Chat Rooms </h1> <div className= { user.friendRequest.length >= 1 ? "addFriendLogo notif" : "addFriendLogo"} onClick={() => {setAddFriendPopUp(!addFriendPopUp)}}/></div>
+                <div onClick={()=>{setAddFriendPopUp(!addFriendPopUp)}}> <h1>Chat Rooms </h1> <div className=  "addFriendLogo" onClick={() => {setAddFriendPopUp(!addFriendPopUp)}}/></div>
                 <h4 onClick={()=>{setAddChatPopUp(!addChatPopUp)}}>Create Room +</h4>
                 {addChatPopUp && 
                 <form> 
                     <div className="gcBox"> 
-                        {/* <input className="gcInput" placeholder="Chat Name..." onChange={async (e)=>{
-                            nUsers = await getPossibleUsers(e.currentTarget)
-                            console.log(nUsers)
+                        <input className="gcInput" placeholder="Chat Name..." onChange={(e)=>{
+
                         }}/>
-                        {nUsers.map(member =>{
-                            (<div> {member.username}</div>)
-                        })} */}
+                        <input className="memberSearch" placeholder="Search Member..." onChange={(e)=>{
+                            setSearchTerm(e.target.value)
+                            console.log(possibleUsers)
+                        }}/>
                         <select name="members" className="memberSelect">
+                            { possibleUsers.map(user=>(
+                                <option value={user}>{user.username}</option>
+                            ))}
                         </select>
                      </div>
                     
@@ -88,7 +92,7 @@ const HomePage = () => {
                 {addFriendPopUp && 
                 <form className= "addFriendPopUp" onSubmit={(e)=>{
                         e.preventDefault()
-                        // makeRequest(`/chatAPI/user/sendRequest/${user.email}/${friendCode}`)
+                        makeRequest(`/chatAPI/user/sendRequest/${user.email}/${friendCode}`)
                     }}> 
                     <div className="codeInput"><input type="text"  value = {friendCode} onChange={(input) => {setFriendCode(input.target.value)}}/> </div>
                     <div className="requestPopUp" data-state="uncollapsed" onClick={(e)=>{
@@ -105,7 +109,7 @@ const HomePage = () => {
                     }}/>
                     { requestsPopUp && <section className="incomingRequests"> Incoming Requests 
                         {user.friendRequest.map(request => 
-                            (<div> <h1>{request.username} </h1> <section className="requestSection"><div className="requestOption" onClick={(e)=>{addFriend( user._id, request._id, "accept")}}/> <div className="requestOption" onClick={(e)=>{addFriend( user._id, request._id, "reject")}}/></section> </div>))
+                            (<div> <h1>{request.username} </h1> <section className="requestSection"><div className="requestOption" onClick={(e)=>{handleFriend( user._id, request._id, "accept")}}/> <div className="requestOption" onClick={(e)=>{handleFriend( user._id, request._id, "reject")}}/></section> </div>))
                         }
                     </section> }
                 </form>}

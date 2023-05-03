@@ -1,8 +1,5 @@
-import {useState, useEffect} from 'react';
-import { useUserContext } from './useUserContext';
 
-
-export const getPossibleUsers = async (searchTerm, userID) => {-
+export const getPossibleUsers = async (searchTerm, userID) => {
         try{ 
             const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");

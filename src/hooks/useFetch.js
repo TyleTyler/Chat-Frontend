@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import { useUserContext } from './useUserContext';
 
 
-export const useFetch = (url, raw = {}) => {
+export const useFetch = () => {
     const [error, setError] = useState(null)
     const [data, setData] = useState(null)
     const [isPending, setPending] = useState(true)
@@ -22,13 +22,6 @@ export const useFetch = (url, raw = {}) => {
             throw new Error(error)
         }
         return data.json()
-    }
-    useEffect(async ()=>{
-        try{
-            setData( await makeRequest(url, raw))
-        }catch(e){
-            console.log(e)
-        }
-    }, [])   
+    }  
     return { data, isPending, error, makeRequest}
 }

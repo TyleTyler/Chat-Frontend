@@ -29,7 +29,10 @@ const Navbar = () => {
                         alert("Copied Friend Code")
                     }}>Friend Code: {user.friendCode}</div>
                     <hr/>
-                    <div className="popUptext" onClick={logout}>Logout</div>    
+                    <div className="popUptext" onClick={(e)=>{
+                        logout()
+                        Location.reload()
+                    }}>Logout</div>    
                 </section>}
                 <img src={userPFP} className="pfp"/>
              </div>)}

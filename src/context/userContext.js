@@ -16,26 +16,16 @@ export const userReducer = (state, action)=>{
     }
 }
 export const UserContextProvider = ({children})=>{
-    const [changes, setChanges] = useState(false)
-    const stageChanges = () => {
-      setChanges(!changes)
-    }
     const [state, dispatch] = useReducer(userReducer, {
         user:null
     })
     useEffect(()=>{
         const user = JSON.parse(localStorage.getItem("user"))
-
-        if(user){
-            fetch('/chatAPI/user/getUser/' + user._doc._id)
-            .then(response => {return response.json()})
-            .then(updatedUser =>
-                 {dispatch({type: userActions.LOGIN, payload :updatedUser })})
-        }
+        dispatch({type: userActions.LOGIN, payload : user._doc })
+        
     },[])
-
     return(
-        <UserContext.Provider value={{...state, dispatch, stageChanges}}>
+        <UserContext.Provider value={{...state, dispatch}}>
             {children}
         </UserContext.Provider>
     )

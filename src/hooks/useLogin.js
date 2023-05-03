@@ -15,19 +15,24 @@ export const useLogin = ()=>{
             headers: {'Content-Type' : 'application/json'},
             body : JSON.stringify({email, password})
         })
-
-        const json = await response.json()
+        let user = await response.json()
+        const userChats = await fetch("/chatAPI/chat/getChats", {
+            method: "POST",
+            headers : { 'Content-Type' : 'application/json'},
+            body: JSON.stringify({"userID" : user._doc._id})
+        }).then((res)=>{ return res.json()})
+        user = {...user._doc, chats: userChats}
 
         if(!response.ok){
             setLoading(false)
-            setError(json.error)
+            setError(user.error)
         }
         if(response.ok){
             //Saving user to the local storage
-            localStorage.setItem('user' ,JSON.stringify(json))
+            localStorage.setItem('user' ,JSON.stringify(user))
 
             //Updating UserAuth
-            dispatch({type: userActions.LOGIN, payload: json})
+            dispatch({type: userActions.LOGIN, payload: user})
             
             setLoading(false)
         }

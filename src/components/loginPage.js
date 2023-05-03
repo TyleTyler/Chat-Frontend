@@ -10,6 +10,9 @@ const LoginPage = () => {
     const handleSubmit = async (eventObj)=>{
         eventObj.preventDefault()
         await login(email, password)
+        if(!error){
+            window.location.href = window.location.href;
+        }
     }
     return (  <form className="signupPage" onSubmit={handleSubmit}>
         <h1>Login</h1>
