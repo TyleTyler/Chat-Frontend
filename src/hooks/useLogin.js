@@ -16,11 +16,23 @@ export const useLogin = ()=>{
             body : JSON.stringify({email, password})
         })
         let user = await response.json()
+        console.log(user)
         const userChats = await fetch("/chatAPI/chat/getChats", {
             method: "POST",
             headers : { 'Content-Type' : 'application/json'},
             body: JSON.stringify({"userID" : user._doc._id})
         }).then((res)=>{ return res.json()})
+
+        for(const friend of user._doc.friends){
+            await fetch("/chatApi/chat/", {
+                method: "POST",
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    "userID": user._doc._id,
+                    "friendID": friend._id
+                })}).then(res =>{ return res.json()})
+        }
+        
         user = {...user._doc, chats: userChats}
 
         if(!response.ok){

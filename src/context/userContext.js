@@ -21,8 +21,7 @@ export const UserContextProvider = ({children})=>{
     })
     useEffect(()=>{
         const user = JSON.parse(localStorage.getItem("user"))
-        dispatch({type: userActions.LOGIN, payload : user._doc })
-        
+        dispatch({type: userActions.LOGIN, payload : user })
     },[])
     return(
         <UserContext.Provider value={{...state, dispatch}}>

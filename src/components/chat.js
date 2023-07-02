@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useActiveContext } from "../hooks/userActiveContext";
 import userPFP from "../public/user.png"
 
-const Friend = ({user}) => {
+const Chat = ({chat}) => {
     const {activeComponent, activate, activeSetting, setSettings } = useActiveContext()
-    const {username} =  user
+    const {chatName} =  chat
     const [active, setActive] = useState(false);
     useEffect(()=>{
-        if(activeComponent == user._id){
+        if(activeComponent == chat._id){
             setActive(true)
         }
         else{setActive(false)}
@@ -15,16 +15,16 @@ const Friend = ({user}) => {
 
     return ( <section className={ active ? 'friendSection activated' : 'friendSection'} 
     onClick={(e) => {
-        activate(user._id)
-        if(activeComponent == user._id){
+        activate(chat._id)
+        if(activeComponent == chat._id){
             setActive(false)
             activate(null)
         }
       }}
     onContextMenu={(e)=>{
         e.preventDefault()
-        setSettings({ user, x: e.clientX, y: e.clientY})
-    }}><img src={userPFP} className="pfp"/> <div className="userPFP"/> {username} </section> );
+        setSettings({ chat, x: e.clientX, y: e.clientY})
+    }}><img src={userPFP} className="pfp"/> <div className="userPFP"/> {chatName} </section> );
 }
  
-export default Friend;
+export default Chat;

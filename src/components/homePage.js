@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useFetch} from "../hooks/useFetch"
 import { useUserContext } from "../hooks/useUserContext";
-import Friend from "./friend";
+import Chat from "./chat";
 import { useActiveContext } from "../hooks/userActiveContext";
 import { useRemoveFriend } from "../hooks/useRemoveFriend";
 import { useAddFriend } from "../hooks/useAddFriend";
 import { getPossibleUsers } from "../hooks/useGetPossibleUsers";
+import { useMakeGC } from "../hooks/useMakeGC";
 
 const HomePage = () => {
     const {user} = useUserContext()
@@ -18,16 +19,19 @@ const HomePage = () => {
     const [possibleUsers, setPossibleUsers] = useState()
     const [searchTerm, setSearchTerm] = useState("")
     const {makeRequest} = useFetch()
+    const [friendChats, setFriendChats] = useState([])
+    const [newMemberList, setNewMemberList] = useState([])
+    const [newChatName, setNewChatName] = useState("")
+    const {makeGc} = useMakeGC()
 
-    
-    const chatList = [...user.friends, user.chats]
-    console.log(chatList);
+
     useEffect(()=>{
         getPossibleUsers(searchTerm, user._id).then((data)=>{
             setPossibleUsers(data)
         })
     },[user._id, searchTerm])
-
+    
+    const chatList = [...friendChats, user.chats]
     const {activeComponent, activate, activeSetting, setSettings} = useActiveContext()
     const settingBox = useRef()
     const disableSetting = (pointer) =>{
@@ -41,7 +45,15 @@ const HomePage = () => {
         setSettings(null)
     }
     
-    
+    const sumbitNewGC = async (e, gcName, memberList) => {
+        setNewMemberList([user._id, ...newMemberList])
+        if (gcName === "" || memberList.length <= 1){
+                setNewMemberList(newMemberList.filter(member => member !== user.id))
+                e.preventDefault()
+                return false
+        }
+        makeGc(gcName, memberList)
+    }
     
 
     return (<div onClick= {(e)=>disableSetting(e)}   className="homePage">
@@ -72,22 +84,35 @@ const HomePage = () => {
                 <div onClick={()=>{setAddFriendPopUp(!addFriendPopUp)}}> <h1>Chat Rooms </h1> <div className=  "addFriendLogo" onClick={() => {setAddFriendPopUp(!addFriendPopUp)}}/></div>
                 <h4 onClick={()=>{setAddChatPopUp(!addChatPopUp)}}>Create Room +</h4>
                 {addChatPopUp && 
-                <form> 
+                <form onSubmit={(e)=> sumbitNewGC(e, newChatName, newMemberList)}> 
                     <div className="gcBox"> 
                         <input className="gcInput" placeholder="Chat Name..." onChange={(e)=>{
-
+                            setNewChatName(e.currentTarget.value)
                         }}/>
-                        <input className="memberSearch" placeholder="Search Member..." onChange={(e)=>{
+                        <input className="memberSearch" placeholder="Select up  to 9 Members..." onChange={(e)=>{
                             setSearchTerm(e.target.value)
-                            console.log(possibleUsers)
                         }}/>
-                        <select name="members" className="memberSelect">
+                        <fieldset name="members" className="memberSelect">
                             { possibleUsers.map(user=>(
-                                <option value={user}>{user.username}</option>
+                                <div className="member" onClick={(e)=>{
+                                    if(newMemberList.length > 9){
+                                        return
+                                    }
+                                    e.currentTarget.classList.toggle("active")
+                                    if(newMemberList.includes(user._id)){
+                                        setNewMemberList(newMemberList.filter(listUser => listUser !== user._id))
+                                    }
+                                    else{
+                                        setNewMemberList([...newMemberList, user._id])
+                                    }
+                                }}>
+                                    <option type = "radio" name={user.username}  value={user} >{user.username} </option>
+                                    <div className="MemberCheck"/>
+                                </div>
                             ))}
-                        </select>
+                        </fieldset>
+                        <button className="groupChatBut">Create Chat</button>
                      </div>
-                    
                 </form>}
                 {addFriendPopUp && 
                 <form className= "addFriendPopUp" onSubmit={(e)=>{
@@ -113,7 +138,7 @@ const HomePage = () => {
                         }
                     </section> }
                 </form>}
-                {user.friends.map(friend => (<Friend user = {friend}/>))}
+                {Object.values(user.chats).map(chat => (<Chat chat = {chat}/>))}
             </section>    
             {activeComponent == null && <section className="chatSection inactive"> <div className="inactivePic"/> <div>Start a conversation with a friend! </div> <span onClick={() => {setAddFriendPopUp(!addFriendPopUp)} }> or Add a friend</span> </section>}        
     </div>);
